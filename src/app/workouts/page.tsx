@@ -18,6 +18,12 @@ type Profile = {
   diet?: string;
 };
 
+type SavedWorkoutPlan = {
+  generatedAt: string;
+  plan: string;
+  // add other fields if needed
+};
+
 export default function WorkoutsPage() {
   return (
     <>
@@ -72,7 +78,7 @@ function parseWorkoutPlan(planText: string) {
 function WorkoutPlanSection() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [showWorkouts, setShowWorkouts] = useState(false);
-  const [savedPlan, setSavedPlan] = useState<any>(null);
+  const [savedPlan, setSavedPlan] = useState<SavedWorkoutPlan | null>(null);
   const [generatedPlan, setGeneratedPlan] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');

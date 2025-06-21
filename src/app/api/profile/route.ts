@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth, currentUser } from '@clerk/nextjs/server';
 import prisma from '@/lib/prisma';
 
-export async function GET(req: NextRequest) {
+export async function GET(_req: NextRequest) {
   try {
     console.log('=== Profile API GET Request Start ===');
     const { userId } = await auth();
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(_req: NextRequest) {
   try {
     console.log('=== Profile API POST Request Start ===');
     const { userId } = await auth();
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Database connection failed' }, { status: 500 });
     }
     
-    const data = await req.json();
+    const data = await _req.json();
     console.log('profile data received:', data);
 
     // Validate required fields

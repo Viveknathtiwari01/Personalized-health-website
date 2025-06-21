@@ -18,6 +18,12 @@ type Profile = {
   diet?: string;
 };
 
+type SavedMealPlan = {
+  generatedAt: string;
+  plan: string;
+  // add other fields if needed
+};
+
 export default function MealsPage() {
   return (
     <>
@@ -36,7 +42,7 @@ function MealPlanSection() {
   const [plan, setPlan] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [savedPlan, setSavedPlan] = useState<any>(null);
+  const [savedPlan, setSavedPlan] = useState<SavedMealPlan | null>(null);
   const [loadingSaved, setLoadingSaved] = useState(true);
 
   useEffect(() => {
@@ -191,13 +197,13 @@ function MealPlanSection() {
               )}
             </div>
             {!savedPlan && (
-              <button
-                onClick={handleGenerate}
-                disabled={loading}
+        <button
+          onClick={handleGenerate}
+          disabled={loading}
                 className="bg-gradient-to-r from-emerald-500 to-purple-500 text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:scale-105 hover:shadow-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-emerald-200 disabled:opacity-60 disabled:cursor-not-allowed"
-              >
+        >
                 {loading ? <span className="animate-pulse">Generating...</span> : 'Generate Meal Plan'}
-              </button>
+        </button>
             )}
             <div className="mt-8 min-h-[160px]">
               {error && <div className="text-red-600 font-semibold mb-4 animate-fade-in">{error}</div>}
@@ -268,7 +274,7 @@ function MealPlanSection() {
                   </div>
                 </div>
               )}
-            </div>
+        </div>
           </>
         )}
       </div>

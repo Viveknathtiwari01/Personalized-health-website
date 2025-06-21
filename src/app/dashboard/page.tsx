@@ -25,6 +25,7 @@ import {
   FaTimesCircle,
   FaExclamationTriangle
 } from 'react-icons/fa';
+import Image from 'next/image';
 
 type Profile = {
   name?: string;
@@ -55,7 +56,7 @@ export default function DashboardPage() {
         <RedirectToSignIn />
       </SignedOut>
       <SignedIn>
-        <DashboardContent />
+          <DashboardContent />
       </SignedIn>
     </>
   )
@@ -126,10 +127,12 @@ function DashboardContent() {
           <div className="relative">
             {profile?.imageUrl ? (
               <div className="w-16 h-16 rounded-full overflow-hidden border-4 border-emerald-200 shadow-lg">
-                <img 
+                <Image 
                   src={profile.imageUrl} 
                   alt="Profile" 
                   className="w-full h-full object-cover"
+                  width={64}
+                  height={64}
                 />
               </div>
             ) : (
@@ -212,10 +215,12 @@ function DashboardContent() {
               <div className="text-center mb-4">
                 {profile.imageUrl ? (
                   <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-emerald-200 shadow-lg mx-auto mb-3">
-                    <img 
+                    <Image 
                       src={profile.imageUrl} 
                       alt="Profile" 
                       className="w-full h-full object-cover"
+                      width={80}
+                      height={80}
                     />
                   </div>
                 ) : (
@@ -420,7 +425,7 @@ function DashboardContent() {
           <div className="bg-gradient-to-r from-purple-500 to-indigo-500 p-3 rounded-full">
             <FaLightbulb className="text-white text-xl" />
           </div>
-          <div>
+    <div>
             <h3 className="text-xl font-bold text-purple-700 mb-2">Today's Insights</h3>
             <ul className="space-y-2 text-slate-700">
               <li className="flex items-center gap-2">
@@ -442,7 +447,7 @@ function DashboardContent() {
             </ul>
           </div>
         </div>
-      </div>
+    </div>
     </section>
   );
 } 

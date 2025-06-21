@@ -3,6 +3,7 @@ import { useUser } from '@clerk/nextjs';
 import { useEffect, useState, useRef } from 'react';
 import { FaUser, FaVenusMars, FaBirthdayCake, FaWeight, FaRulerVertical, FaAllergies, FaBullseye, FaLeaf, FaHome, FaCamera, FaUpload, FaEdit, FaSave, FaTimes } from 'react-icons/fa';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function ProfilePage() {
   const { user } = useUser();
@@ -94,7 +95,7 @@ export default function ProfilePage() {
         return new Promise((resolve) => {
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d');
-          const img = new Image();
+          const img = new window.Image();
           
           img.onload = () => {
             // Calculate new dimensions (max 300x300 for profile image)
@@ -317,9 +318,11 @@ export default function ProfilePage() {
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
                     </div>
                   ) : imagePreview ? (
-                    <img 
+                    <Image 
                       src={imagePreview} 
                       alt="Profile" 
+                      width={128}
+                      height={128}
                       className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
                     />
                   ) : (

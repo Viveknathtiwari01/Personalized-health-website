@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth, currentUser } from '@clerk/nextjs/server';
 import prisma from '@/lib/prisma';
 
-export async function GET(req: NextRequest) {
+export async function GET(_req: NextRequest) {
   const { userId } = await auth();
   if (!userId) return NextResponse.json({}, { status: 401 });
   
@@ -22,12 +22,12 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(_req: NextRequest) {
   const { userId } = await auth();
   if (!userId) return NextResponse.json({}, { status: 401 });
   
   try {
-    const data = await req.json();
+    const data = await _req.json();
     const { plan, generatedAt } = data;
     
     console.log('Saving meal plan for user:', userId, 'Plan length:', plan?.length);
