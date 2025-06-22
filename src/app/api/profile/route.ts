@@ -24,7 +24,12 @@ export async function GET(_req: NextRequest) {
       return NextResponse.json(user);
     } catch (dbError) {
       console.error('Database error in GET:', dbError);
-      return NextResponse.json({ error: 'Database connection failed' }, { status: 500 });
+      const errorMessage = dbError instanceof Error ? dbError.message : 'Unknown database error';
+      return NextResponse.json({ 
+        error: 'Database connection failed', 
+        details: errorMessage,
+        hint: 'Check DATABASE_URL environment variable'
+      }, { status: 500 });
     }
   } catch (error) {
     console.error('GET request error:', error);
@@ -48,7 +53,12 @@ export async function POST(_req: NextRequest) {
       console.log('Database connection test successful');
     } catch (dbTestError) {
       console.error('Database connection test failed:', dbTestError);
-      return NextResponse.json({ error: 'Database connection failed' }, { status: 500 });
+      const errorMessage = dbTestError instanceof Error ? dbTestError.message : 'Unknown database error';
+      return NextResponse.json({ 
+        error: 'Database connection failed', 
+        details: errorMessage,
+        hint: 'Check DATABASE_URL environment variable and database accessibility'
+      }, { status: 500 });
     }
     
     const data = await _req.json();
@@ -114,7 +124,11 @@ export async function POST(_req: NextRequest) {
         stack: upsertError instanceof Error ? upsertError.stack : 'No stack trace'
       });
       const errorMessage = upsertError instanceof Error ? upsertError.message : 'Unknown upsert error';
-      return NextResponse.json({ error: 'Failed to save profile', details: errorMessage }, { status: 500 });
+      return NextResponse.json({ 
+        error: 'Failed to save profile', 
+        details: errorMessage,
+        hint: 'Check database schema and connection'
+      }, { status: 500 });
     }
 
     // If this is an update and the user has existing meal/workout plans, mark them for regeneration
@@ -148,6 +162,10 @@ export async function POST(_req: NextRequest) {
   } catch (error) {
     console.error('Profile API error:', error);
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    return NextResponse.json({ error: 'Internal server error', details: errorMessage }, { status: 500 });
+    return NextResponse.json({ 
+      error: 'Internal server error', 
+      details: errorMessage,
+      hint: 'Check server logs for more details'
+    }, { status: 500 });
   }
 } 

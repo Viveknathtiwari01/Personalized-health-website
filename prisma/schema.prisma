@@ -8,10 +8,17 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// For MySQL (PlanetScale, Railway, etc.)
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+// For PostgreSQL (Supabase, etc.) - uncomment and comment out MySQL above
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
 
 model User {
   id           String       @id @default(cuid())

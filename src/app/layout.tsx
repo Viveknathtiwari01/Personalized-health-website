@@ -17,6 +17,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <ClerkProvider>
       <html lang="en">
+        <head>
+          <link rel="icon" href="/window.svg" type="image/svg+xml" />
+        </head>
         <body className={inter.className}>
           <Header />
           <main className="min-h-screen bg-gray-200 text-gray-800 px-4 sm:px-8">{children}</main>
