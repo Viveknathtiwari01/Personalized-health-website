@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
 export async function POST(req: NextRequest) {
+  // Prevent execution during build time
+  if (process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE === 'phase-production-build') {
+    return NextResponse.json({ error: 'API not available during build' }, { status: 503 });
+  }
+
   try {
     console.log('=== Contact API POST Request Start ===');
     
