@@ -24,7 +24,7 @@ export default function ChatBox() {
           setConversationId(null);
           setMessages([]);
         }
-      } catch (e) {
+      } catch (_e) {
         setError('Failed to load conversation.');
       }
     }
