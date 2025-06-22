@@ -55,7 +55,7 @@ export default function ChatBox() {
       setConversationId(data.conversation.id);
       setMessages(data.conversation.messages.map((m: any) => ({ role: m.role, text: m.text })));
       setInput('');
-    } catch (e) {
+    } catch (_e) {
       setError('Failed to send message.');
     } finally {
       setLoading(false);

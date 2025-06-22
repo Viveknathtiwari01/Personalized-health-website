@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
   let aiText = '';
   try {
     aiText = await askGeminiChat(message);
-  } catch (e) {
+  } catch (_e) {
     aiText = 'Sorry, there was an error.';
   }
 
