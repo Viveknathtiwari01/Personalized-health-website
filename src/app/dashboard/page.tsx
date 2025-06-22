@@ -437,7 +437,7 @@ function DashboardContent() {
               </li>
               <li className="flex items-center gap-2">
                 <FaBullseye className="text-indigo-500" />
-                <span>You're {Math.abs(loading || !stats ? '--' : stats.weightProgress)}kg closer to your goal</span>
+                <span>You're {(loading || !stats || typeof stats.weightProgress !== 'number') ? '--' : Math.abs(stats.weightProgress)}kg closer to your goal</span>
               </li>
             </ul>
           </div>

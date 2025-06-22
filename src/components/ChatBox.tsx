@@ -26,7 +26,7 @@ export default function ChatBox() {
         }
       } catch (_e) {
         setError('Failed to load conversation.');
-      }
+      } 
     }
     fetchLatest();
   }, []);
