@@ -212,7 +212,7 @@ export default function Footer() {
               <div className="flex items-center gap-2 text-slate-400 text-sm">
                 <span>Developed with</span>
                 <span className="font-semibold bg-gradient-to-r from-emerald-400 to-purple-500 bg-clip-text text-transparent">
-                Developed with Next.js, TypeScript & Tailwind CSS
+                Next.js, TypeScript & Tailwind CSS
                 </span>
               </div>
             </div>

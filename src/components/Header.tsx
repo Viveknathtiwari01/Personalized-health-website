@@ -3,10 +3,11 @@
 
 import { UserButton, SignedIn, SignedOut } from '@clerk/nextjs'
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { useRouter, usePathname } from 'next/navigation'
-import { FaDumbbell, FaBars, FaTimes } from 'react-icons/fa'
+import { FaDumbbell, FaBars, FaTimes, FaRobot, FaUserCircle, FaChartBar, FaUtensils, FaCheckCircle, FaRunning } from 'react-icons/fa'
+import ChatBox from './ChatBox'
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -19,6 +20,8 @@ const navLinks = [
 export default function Header() {
   const [submenuOpen, setSubmenuOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [chatOpen, setChatOpen] = useState(false)
+  const chatButtonRef = useRef<HTMLButtonElement>(null)
   const router = useRouter()
   const pathname = usePathname()
 
@@ -53,6 +56,19 @@ export default function Header() {
     window.addEventListener('open-get-started-menu', handleOpenGetStartedMenu);
     return () => window.removeEventListener('open-get-started-menu', handleOpenGetStartedMenu);
   }, []);
+
+  // Click-away-to-close for desktop submenu
+  useEffect(() => {
+    if (!submenuOpen) return;
+    function handleClick(e: MouseEvent) {
+      const submenu = document.getElementById('explore-submenu');
+      if (submenu && !submenu.contains(e.target as Node)) {
+        setSubmenuOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [submenuOpen]);
 
   const handleNavigation = (href: string) => {
     setSubmenuOpen(false);
@@ -113,14 +129,65 @@ export default function Header() {
               Explore
             </button>
             {submenuOpen && (
-              <div className="absolute right-0 mt-2 w-56 bg-white/80 backdrop-blur-md border border-purple-200 rounded-2xl shadow-2xl z-50 animate-fade-in-submenu">
-                <div className="py-2">
-                  <Link href="/dashboard" className="block px-5 py-3 text-gray-800 font-semibold rounded-xl hover:bg-gradient-to-r hover:from-purple-100 hover:to-emerald-100 hover:text-emerald-700 transition-all duration-200" onClick={() => setSubmenuOpen(false)}>Dashboard</Link>
-                  <Link href="/meals" className="block px-5 py-3 text-gray-800 font-semibold rounded-xl hover:bg-gradient-to-r hover:from-purple-100 hover:to-emerald-100 hover:text-emerald-700 transition-all duration-200" onClick={() => setSubmenuOpen(false)}>Meals</Link>
-                  <Link href="/profile" className="block px-5 py-3 text-gray-800 font-semibold rounded-xl hover:bg-gradient-to-r hover:from-purple-100 hover:to-emerald-100 hover:text-emerald-700 transition-all duration-200" onClick={() => setSubmenuOpen(false)}>Profile</Link>
-                  <Link href="/progress" className="block px-5 py-3 text-gray-800 font-semibold rounded-xl hover:bg-gradient-to-r hover:from-purple-100 hover:to-emerald-100 hover:text-emerald-700 transition-all duration-200" onClick={() => setSubmenuOpen(false)}>Progress</Link>
-                  <Link href="/workouts" className="block px-5 py-3 text-gray-800 font-semibold rounded-xl hover:bg-gradient-to-r hover:from-purple-100 hover:to-emerald-100 hover:text-emerald-700 transition-all duration-200" onClick={() => setSubmenuOpen(false)}>Workout</Link>
-                  <Link href="/test" className="block px-5 py-3 text-gray-800 font-semibold rounded-xl hover:bg-gradient-to-r hover:from-purple-100 hover:to-emerald-100 hover:text-emerald-700 transition-all duration-200" onClick={() => setSubmenuOpen(false)}>Test</Link>
+              <>
+                {/* Overlay for click-away */}
+                <div className="fixed inset-0 z-40" style={{ background: 'transparent' }} />
+                <motion.div
+                  id="explore-submenu"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="absolute right-0 mt-2 w-72 glass-effect border border-purple-200 rounded-3xl shadow-2xl z-50 animate-fade-in-submenu backdrop-blur-lg"
+                  style={{ boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.18)' }}
+                >
+                  <div className="flex flex-col gap-2 py-4 px-4">
+                    <button onClick={() => { handleNavigation('/dashboard') }} className="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-gradient-to-r hover:from-purple-100 hover:to-emerald-100 transition-all duration-200 text-gray-800 font-semibold text-base">
+                      <FaChartBar className="text-xl text-purple-400" /> Dashboard
+                    </button>
+                    <button
+                      ref={chatButtonRef}
+                      onClick={() => { setChatOpen(true); setSubmenuOpen(false); }}
+                      className="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-gradient-to-r hover:from-purple-100 hover:to-emerald-100 transition-all duration-200 text-gray-800 font-semibold text-base"
+                    >
+                      <FaRobot className="text-xl text-purple-500" /> Chat With AI
+                    </button>
+                    <button onClick={() => { handleNavigation('/profile') }} className="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-gradient-to-r hover:from-purple-100 hover:to-emerald-100 transition-all duration-200 text-gray-800 font-semibold text-base">
+                      <FaUserCircle className="text-xl text-indigo-400" /> Profile
+                    </button>
+                    <button onClick={() => { handleNavigation('/progress') }} className="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-gradient-to-r hover:from-purple-100 hover:to-emerald-100 transition-all duration-200 text-gray-800 font-semibold text-base">
+                      <FaCheckCircle className="text-xl text-green-400" /> Progress
+                    </button>
+                    <button onClick={() => { handleNavigation('/meals') }} className="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-gradient-to-r hover:from-purple-100 hover:to-emerald-100 transition-all duration-200 text-gray-800 font-semibold text-base">
+                      <FaUtensils className="text-xl text-emerald-400" /> Meals
+                    </button>
+                    <button onClick={() => { handleNavigation('/workouts') }} className="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-gradient-to-r hover:from-purple-100 hover:to-emerald-100 transition-all duration-200 text-gray-800 font-semibold text-base">
+                      <FaDumbbell className="text-xl text-pink-400" /> Workout
+                    </button>
+                    <button onClick={() => { handleNavigation('/test') }} className="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-gradient-to-r hover:from-purple-100 hover:to-emerald-100 transition-all duration-200 text-gray-800 font-semibold text-base">
+                      <FaRunning className="text-xl text-indigo-400" /> Test
+                    </button>
+                  </div>
+                </motion.div>
+              </>
+            )}
+            {/* Chat Modal */}
+            {chatOpen && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+                <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-0 relative animate-fade-in-submenu border-2 border-purple-200">
+                  <button
+                    onClick={() => setChatOpen(false)}
+                    className="absolute top-3 right-3 text-xl text-slate-500 hover:text-purple-600 focus:outline-none"
+                    aria-label="Close chat"
+                  >
+                    ×
+                  </button>
+                  <div className="p-6 bg-gradient-to-br from-indigo-50 via-purple-50 to-emerald-50 rounded-t-2xl">
+                    <h2 className="text-2xl font-bold text-emerald-700 mb-2">Chat With AI</h2>
+                    <p className="text-slate-600 mb-4">Ask anything about health, fitness, or nutrition!</p>
+                  </div>
+                  <div className="p-4">
+                    <ChatBox />
+                  </div>
                 </div>
               </div>
             )}
@@ -166,11 +233,38 @@ export default function Header() {
                 <div className="mt-2 bg-white/90 backdrop-blur-md border border-purple-200 rounded-2xl shadow-2xl z-50">
                   <div className="py-2 flex flex-col gap-1">
                     <Link href="/dashboard" className="block px-5 py-3 text-gray-800 font-semibold rounded-xl hover:bg-gradient-to-r hover:from-purple-100 hover:to-emerald-100 hover:text-emerald-700 transition-all duration-200" onClick={() => { setSubmenuOpen(false); setMobileMenuOpen(false); }}>Dashboard</Link>
-                    <Link href="/meals" className="block px-5 py-3 text-gray-800 font-semibold rounded-xl hover:bg-gradient-to-r hover:from-purple-100 hover:to-emerald-100 hover:text-emerald-700 transition-all duration-200" onClick={() => { setSubmenuOpen(false); setMobileMenuOpen(false); }}>Meals</Link>
                     <Link href="/profile" className="block px-5 py-3 text-gray-800 font-semibold rounded-xl hover:bg-gradient-to-r hover:from-purple-100 hover:to-emerald-100 hover:text-emerald-700 transition-all duration-200" onClick={() => { setSubmenuOpen(false); setMobileMenuOpen(false); }}>Profile</Link>
                     <Link href="/progress" className="block px-5 py-3 text-gray-800 font-semibold rounded-xl hover:bg-gradient-to-r hover:from-purple-100 hover:to-emerald-100 hover:text-emerald-700 transition-all duration-200" onClick={() => { setSubmenuOpen(false); setMobileMenuOpen(false); }}>Progress</Link>
+                    <Link href="/meals" className="block px-5 py-3 text-gray-800 font-semibold rounded-xl hover:bg-gradient-to-r hover:from-purple-100 hover:to-emerald-100 hover:text-emerald-700 transition-all duration-200" onClick={() => { setSubmenuOpen(false); setMobileMenuOpen(false); }}>Meals</Link>
                     <Link href="/workouts" className="block px-5 py-3 text-gray-800 font-semibold rounded-xl hover:bg-gradient-to-r hover:from-purple-100 hover:to-emerald-100 hover:text-emerald-700 transition-all duration-200" onClick={() => { setSubmenuOpen(false); setMobileMenuOpen(false); }}>Workout</Link>
                     <Link href="/test" className="block px-5 py-3 text-gray-800 font-semibold rounded-xl hover:bg-gradient-to-r hover:from-purple-100 hover:to-emerald-100 hover:text-emerald-700 transition-all duration-200" onClick={() => { setSubmenuOpen(false); setMobileMenuOpen(false); }}>Test</Link>
+                    <button
+                      onClick={() => { setChatOpen(true); setSubmenuOpen(false); setMobileMenuOpen(false); }}
+                      className="block w-full text-left px-5 py-3 text-gray-800 font-semibold rounded-xl hover:bg-gradient-to-r hover:from-purple-100 hover:to-emerald-100 hover:text-emerald-700 transition-all duration-200"
+                    >
+                      Chat With AI
+                    </button>
+                  </div>
+                </div>
+              )}
+              {/* Chat Modal for mobile */}
+              {chatOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+                  <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-0 relative animate-fade-in-submenu border-2 border-purple-200">
+                    <button
+                      onClick={() => setChatOpen(false)}
+                      className="absolute top-3 right-3 text-xl text-slate-500 hover:text-purple-600 focus:outline-none"
+                      aria-label="Close chat"
+                    >
+                      ×
+                    </button>
+                    <div className="p-6 bg-gradient-to-br from-indigo-50 via-purple-50 to-emerald-50 rounded-t-2xl">
+                      <h2 className="text-2xl font-bold text-emerald-700 mb-2">Chat With AI</h2>
+                      <p className="text-slate-600 mb-4">Ask anything about health, fitness, or nutrition!</p>
+                    </div>
+                    <div className="p-4">
+                      <ChatBox />
+                    </div>
                   </div>
                 </div>
               )}

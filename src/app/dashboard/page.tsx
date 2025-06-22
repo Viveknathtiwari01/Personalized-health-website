@@ -62,20 +62,18 @@ export default function DashboardPage() {
 function DashboardContent() {
   const { user } = useUser();
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [stats] = useState<DashboardStats>({
-    workoutStreak: 7,
-    mealAdherence: 85,
-    caloriesBurned: 2450,
-    weightProgress: -2.5,
-    weeklyWorkouts: 5,
-    weeklyMeals: 18
-  });
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch('/api/profile')
       .then(res => res.ok ? res.json() : null)
       .then(data => setProfile(data))
       .catch(() => setProfile(null));
+    fetch('/api/profile?dashboard=1')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => setStats(data))
+      .finally(() => setLoading(false));
   }, []);
 
   const weeklyData = [
@@ -155,7 +153,7 @@ function DashboardContent() {
               <span>+12%</span>
             </div>
           </div>
-          <h3 className="text-3xl font-bold text-slate-800">{stats.workoutStreak}</h3>
+          <h3 className="text-3xl font-bold text-slate-800">{loading || !stats ? '--' : stats.workoutStreak}</h3>
           <p className="text-slate-600">Day Streak</p>
         </div>
 
@@ -167,7 +165,7 @@ function DashboardContent() {
               <span>+5%</span>
             </div>
           </div>
-          <h3 className="text-3xl font-bold text-slate-800">{stats.mealAdherence}%</h3>
+          <h3 className="text-3xl font-bold text-slate-800">{loading || !stats ? '--' : stats.mealAdherence}%</h3>
           <p className="text-slate-600">Meal Adherence</p>
         </div>
 
@@ -179,7 +177,7 @@ function DashboardContent() {
               <span>+8%</span>
             </div>
           </div>
-          <h3 className="text-3xl font-bold text-slate-800">{stats.caloriesBurned}</h3>
+          <h3 className="text-3xl font-bold text-slate-800">{loading || !stats ? '--' : stats.caloriesBurned}</h3>
           <p className="text-slate-600">Calories Burned</p>
         </div>
 
@@ -188,10 +186,10 @@ function DashboardContent() {
             <FaWeight className="text-2xl text-indigo-500" />
             <div className="flex items-center gap-1 text-sm text-green-500">
               <FaArrowDown />
-              <span>-2.5kg</span>
+              <span>{loading || !stats ? '--' : stats.weightProgress}kg</span>
             </div>
           </div>
-          <h3 className="text-3xl font-bold text-slate-800">{stats.weightProgress}kg</h3>
+          <h3 className="text-3xl font-bold text-slate-800">{loading || !stats ? '--' : stats.weightProgress}kg</h3>
           <p className="text-slate-600">Weight Progress</p>
         </div>
       </div>
@@ -427,19 +425,19 @@ function DashboardContent() {
             <ul className="space-y-2 text-slate-700">
               <li className="flex items-center gap-2">
                 <FaTrophy className="text-yellow-500" />
-                <span>Great job! You're on a {stats.workoutStreak}-day workout streak</span>
+                <span>Great job! You're on a {loading || !stats ? '--' : stats.workoutStreak}-day workout streak</span>
               </li>
               <li className="flex items-center gap-2">
                 <FaUtensils className="text-emerald-500" />
-                <span>Your meal adherence is {stats.mealAdherence}% - keep it up!</span>
+                <span>Your meal adherence is {loading || !stats ? '--' : stats.mealAdherence}% - keep it up!</span>
               </li>
               <li className="flex items-center gap-2">
                 <FaFire className="text-orange-500" />
-                <span>You've burned {stats.caloriesBurned} calories this week</span>
+                <span>You've burned {loading || !stats ? '--' : stats.caloriesBurned} calories this week</span>
               </li>
               <li className="flex items-center gap-2">
                 <FaBullseye className="text-indigo-500" />
-                <span>You're {Math.abs(stats.weightProgress)}kg closer to your goal</span>
+                <span>You're {Math.abs(loading || !stats ? '--' : stats.weightProgress)}kg closer to your goal</span>
               </li>
             </ul>
           </div>

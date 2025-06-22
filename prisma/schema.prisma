@@ -40,6 +40,7 @@ model User {
   mealPlan     MealPlan?
   workoutPlan  WorkoutPlan?
   createdAt    DateTime     @default(now())
+  conversations Conversation[]
 }
 
 model Contact {
@@ -94,4 +95,21 @@ model WorkoutPlan {
   generatedAt DateTime
   updatedAt   DateTime @updatedAt
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Conversation {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  messages  Message[]
+  createdAt DateTime @default(now())
+}
+
+model Message {
+  id              String   @id @default(cuid())
+  conversationId  String
+  conversation    Conversation @relation(fields: [conversationId], references: [id])
+  role            String   // 'user' or 'ai'
+  text            String   @db.Text
+  createdAt       DateTime @default(now())
 }

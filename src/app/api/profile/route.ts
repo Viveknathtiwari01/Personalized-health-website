@@ -4,14 +4,63 @@ import prisma from '@/lib/prisma';
 
 export async function GET(_req: NextRequest) {
   try {
-    console.log('=== Profile API GET Request Start ===');
+    const url = new URL(_req.url);
+    const dashboard = url.searchParams.get('dashboard');
     const { userId } = await auth();
-    console.log('GET userId:', userId);
     if (!userId) {
-      console.log('No userId found in GET, returning 401');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    
+    if (dashboard) {
+      // Dynamic dashboard stats
+      const user = await prisma.user.findUnique({ where: { clerkId: userId } });
+      if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      // Workout streak: count consecutive days with a workout
+      const workouts = await prisma.workout.findMany({
+        where: { userId: user.id },
+        orderBy: { date: 'desc' },
+      });
+      let streak = 0;
+      let prev = new Date();
+      for (const w of workouts) {
+        const d = new Date(w.date);
+        if (streak === 0) prev = d;
+        if (Math.abs((prev.getTime() - d.getTime()) / (1000 * 60 * 60 * 24)) <= 1) {
+          streak++;
+          prev = d;
+        } else {
+          break;
+        }
+      }
+      // Meal adherence: percent of days with at least 3 meals
+      const meals = await prisma.meal.findMany({ where: { userId: user.id } });
+      const mealDays = new Map();
+      for (const m of meals) {
+        const day = m.date.toISOString().slice(0, 10);
+        mealDays.set(day, (mealDays.get(day) || 0) + 1);
+      }
+      const adherence = mealDays.size > 0 ? Math.round([...mealDays.values()].filter(v => v >= 3).length / mealDays.size * 100) : 0;
+      // Calories burned: sum of workout durations * 5 (simple estimate)
+      const caloriesBurned = workouts.reduce((sum, w) => sum + (w.duration || 0) * 5, 0);
+      // Weight progress: difference between first and last habit of type 'weight'
+      const weightHabits = await prisma.habit.findMany({ where: { userId: user.id, type: 'weight' }, orderBy: { date: 'asc' } });
+      let weightProgress = 0;
+      if (weightHabits.length > 1) {
+        weightProgress = weightHabits[weightHabits.length - 1].value - weightHabits[0].value;
+      }
+      // Weekly workouts and meals (last 7 days)
+      const now = new Date();
+      const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      const weeklyWorkouts = workouts.filter(w => w.date >= weekAgo).length;
+      const weeklyMeals = meals.filter(m => m.date >= weekAgo).length;
+      return NextResponse.json({
+        workoutStreak: streak,
+        mealAdherence: adherence,
+        caloriesBurned,
+        weightProgress,
+        weeklyWorkouts,
+        weeklyMeals,
+      });
+    }
     // Test database connection
     try {
       const user = await prisma.user.findUnique({ where: { clerkId: userId } });

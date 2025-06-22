@@ -72,7 +72,7 @@ export function FitnessSection() {
           viewport={{ once: true }}
           className="mt-4"
         >
-          <Link href="/#contact" className="inline-block bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-3 rounded-full shadow-lg transition-colors duration-200 text-lg">Start Your Fitness Journey</Link>
+          <Link href="/#contact" className="inline-block bg-emerald-400 hover:bg-purple-700 text-white font-bold px-8 py-3 rounded-full shadow-lg transition-colors duration-200 text-lg">Start Your Fitness Journey</Link>
         </motion.div>
       </div>
       {/* Right: Animated Card with Fitness Image */}
