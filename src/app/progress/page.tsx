@@ -13,7 +13,6 @@ import {
   FaBullseye,
   FaRunning,
   FaWeight,
-  FaRulerVertical,
   FaLightbulb,
   FaArrowUp,
   FaArrowDown,

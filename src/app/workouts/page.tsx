@@ -37,44 +37,6 @@ export default function WorkoutsPage() {
   )
 }
 
-// Helper function to parse and structure workout plan
-function parseWorkoutPlan(planText: string) {
-  const workouts = [];
-  const lines = planText.split('\n').filter(line => line.trim());
-  
-  let currentWorkout = null;
-  let currentExercises = [];
-  
-  for (const line of lines) {
-    const trimmedLine = line.trim();
-    if (trimmedLine.toLowerCase().includes('warm-up') || trimmedLine.toLowerCase().includes('warm up')) {
-      if (currentWorkout) workouts.push({ ...currentWorkout, exercises: currentExercises });
-      currentWorkout = { title: 'Warm-up', icon: FaHeart, color: 'from-red-400 to-pink-400', duration: '5-10 minutes' };
-      currentExercises = [];
-    } else if (trimmedLine.toLowerCase().includes('cardio') || trimmedLine.toLowerCase().includes('aerobic')) {
-      if (currentWorkout) workouts.push({ ...currentWorkout, exercises: currentExercises });
-      currentWorkout = { title: 'Cardio', icon: FaRunning, color: 'from-blue-400 to-cyan-400', duration: '20-30 minutes' };
-      currentExercises = [];
-    } else if (trimmedLine.toLowerCase().includes('strength') || trimmedLine.toLowerCase().includes('weight')) {
-      if (currentWorkout) workouts.push({ ...currentWorkout, exercises: currentExercises });
-      currentWorkout = { title: 'Strength Training', icon: FaDumbbell, color: 'from-purple-400 to-indigo-400', duration: '45-60 minutes' };
-      currentExercises = [];
-    } else if (trimmedLine.toLowerCase().includes('cool-down') || trimmedLine.toLowerCase().includes('cool down')) {
-      if (currentWorkout) workouts.push({ ...currentWorkout, exercises: currentExercises });
-      currentWorkout = { title: 'Cool-down', icon: FaLeaf, color: 'from-green-400 to-emerald-400', duration: '5-10 minutes' };
-      currentExercises = [];
-    } else if (trimmedLine && currentWorkout && (trimmedLine.startsWith('-') || trimmedLine.startsWith('•') || trimmedLine.startsWith('*'))) {
-      currentExercises.push(trimmedLine.replace(/^[-•*]\s*/, ''));
-    } else if (trimmedLine && currentWorkout && !trimmedLine.toLowerCase().includes('sets') && !trimmedLine.toLowerCase().includes('reps')) {
-      currentExercises.push(trimmedLine);
-    }
-  }
-  
-  if (currentWorkout) workouts.push({ ...currentWorkout, exercises: currentExercises });
-  
-  return workouts;
-}
-
 function WorkoutPlanSection() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [savedPlan, setSavedPlan] = useState<SavedWorkoutPlan | null>(null);

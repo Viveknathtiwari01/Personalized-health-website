@@ -15,10 +15,8 @@ async function callGemini(prompt: string): Promise<string> {
     try {
       const err = await res.json();
       errorMsg = JSON.stringify(err);
-      // eslint-disable-next-line no-console
       console.error('Gemini API error:', errorMsg);
-    } catch (e) {
-      // eslint-disable-next-line no-console
+    } catch (_e) {
       console.error('Gemini API error (no JSON):', res.statusText);
     }
     throw new Error(errorMsg);

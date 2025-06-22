@@ -16,7 +16,7 @@ export default function ChatBox() {
     try {
       const aiText = await askGeminiChat(input);
       setMessages(msgs => [...msgs, { role: 'ai', text: aiText }]);
-    } catch (e) {
+    } catch (_e) {
       setMessages(msgs => [...msgs, { role: 'ai', text: 'Sorry, there was an error.' }]);
     } finally {
       setLoading(false);

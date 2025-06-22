@@ -47,7 +47,7 @@ export function ContactSection() {
       } else {
         setError(data.error || 'Failed to send message. Please try again.');
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Network error. Please check your connection and try again.');
     } finally {
       setLoading(false);
