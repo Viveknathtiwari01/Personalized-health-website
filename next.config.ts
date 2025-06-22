@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   images: {
     domains: ['images.unsplash.com'],
   },
+  experimental: {
+    serverComponentsExternalPackages: ['@prisma/client'],
+  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
