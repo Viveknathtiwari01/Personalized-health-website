@@ -15,15 +15,12 @@ import {
   FaCalendarAlt,
   FaClock,
   FaLeaf,
-  FaRunning,
   FaWeight,
   FaRulerVertical,
   FaLightbulb,
   FaArrowUp,
   FaArrowDown,
-  FaCheckCircle,
-  FaTimesCircle,
-  FaExclamationTriangle
+  FaCheckCircle
 } from 'react-icons/fa';
 import Image from 'next/image';
 
@@ -65,7 +62,7 @@ export default function DashboardPage() {
 function DashboardContent() {
   const { user } = useUser();
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [stats, setStats] = useState<DashboardStats>({
+  const [stats] = useState<DashboardStats>({
     workoutStreak: 7,
     mealAdherence: 85,
     caloriesBurned: 2450,

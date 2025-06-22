@@ -1,7 +1,7 @@
 "use client";
 import { useUser } from '@clerk/nextjs';
 import { useEffect, useState, useRef } from 'react';
-import { FaUser, FaVenusMars, FaBirthdayCake, FaWeight, FaRulerVertical, FaAllergies, FaBullseye, FaLeaf, FaHome, FaCamera, FaUpload, FaEdit, FaSave, FaTimes } from 'react-icons/fa';
+import { FaUser, FaVenusMars, FaBirthdayCake, FaWeight, FaRulerVertical, FaAllergies, FaBullseye, FaLeaf, FaHome, FaCamera, FaEdit, FaSave, FaTimes } from 'react-icons/fa';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -162,8 +162,8 @@ export default function ProfilePage() {
             try {
               result = JSON.parse(responseText);
               console.log('Parsed result:', result);
-            } catch (e) {
-              console.error('Failed to parse response as JSON:', e);
+            } catch (_e) {
+              console.error('Failed to parse response as JSON:', _e);
               setImageMessage('Invalid response from server');
               setTimeout(() => setImageMessage(''), 5000);
               setImageUploading(false);
@@ -195,7 +195,7 @@ export default function ProfilePage() {
             let errorData;
             try {
               errorData = JSON.parse(responseText);
-            } catch (e) {
+            } catch (_e) {
               errorData = { error: 'Invalid error response' };
             }
             console.error('Profile update error:', errorData);
@@ -246,8 +246,8 @@ export default function ProfilePage() {
         try {
           result = JSON.parse(responseText);
           console.log('Parsed result:', result);
-        } catch (e) {
-          console.error('Failed to parse response as JSON:', e);
+        } catch (_e) {
+          console.error('Failed to parse response as JSON:', _e);
           setMessage('Invalid response from server');
           setSaving(false);
           return;
@@ -275,7 +275,7 @@ export default function ProfilePage() {
         let errorData;
         try {
           errorData = JSON.parse(responseText);
-        } catch (e) {
+        } catch (_e) {
           errorData = { error: 'Invalid error response' };
         }
         console.error('Profile update error:', errorData);

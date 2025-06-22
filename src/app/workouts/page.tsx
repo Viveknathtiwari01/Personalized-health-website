@@ -4,7 +4,7 @@ import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/nextjs'
 import { useState, useEffect } from 'react';
 import { generateWorkoutPlan } from '../../lib/ai';
 import Link from 'next/link';
-import { FaDumbbell, FaRunning, FaHeart, FaFire, FaClock, FaLightbulb, FaCalculator, FaLeaf, FaTrophy, FaHome } from 'react-icons/fa';
+import { FaDumbbell, FaRunning, FaHeart, FaFire, FaClock, FaLightbulb, FaLeaf, FaHome } from 'react-icons/fa';
 
 type Profile = {
   name?: string;
@@ -77,7 +77,6 @@ function parseWorkoutPlan(planText: string) {
 
 function WorkoutPlanSection() {
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [showWorkouts, setShowWorkouts] = useState(false);
   const [savedPlan, setSavedPlan] = useState<SavedWorkoutPlan | null>(null);
   const [generatedPlan, setGeneratedPlan] = useState('');
   const [loading, setLoading] = useState(false);

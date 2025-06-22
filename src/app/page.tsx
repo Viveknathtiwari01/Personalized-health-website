@@ -1,8 +1,5 @@
 // src/app/page.tsx
-import Image from 'next/image'
-import Link from 'next/link'
 import { HeroFitness } from "@/components/ui/hero-fitness"
-import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/nextjs'
 import { AboutSection } from '@/components/AboutSection'
 import { FitnessSection } from '@/components/FitnessSection'
 import { ContactSection } from '@/components/ContactSection'

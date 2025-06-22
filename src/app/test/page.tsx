@@ -11,7 +11,6 @@ import {
   FaTimesCircle, 
   FaExclamationTriangle,
   FaTrophy,
-  FaCalendarAlt,
   FaBullseye,
   FaLightbulb,
   FaArrowUp,
